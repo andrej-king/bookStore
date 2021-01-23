@@ -1,11 +1,9 @@
 //region declaring variable
 const express       = require('express');
-const path          = require('path');
 const ejs           = require('ejs');
 const bodyParser    = require('body-parser');
-const rootDirectory = require('./utilites/path');
 const adminRouter   = require('./routes/admin');
-const mainRouter    = require('./routes/main');
+const mainRouter    = require('./routes/shop');
 const PORT          = process.env.PORT || 3000;
 const app           = express();
 //endregion
@@ -15,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 //region routes
-app.use('/admin', adminRouter.router); // admin - is a filter
+app.use('/admin', adminRouter); // admin - is a filter
 app.use(mainRouter);
 //endregion
 

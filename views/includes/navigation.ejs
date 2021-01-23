@@ -1,8 +1,14 @@
 <% navItems = [
     {title: 'Shop', link: '/'},
-    {title: 'Add Product', link: '/admin/add-product'}
+    {title: 'Products', link: '/products'},
+    {title: 'Cart', link: '/cart'},
+    {title: 'Orders', link: '/orders'},
+    {title: 'Add Product', link: '/admin/add-product'},
+    {title: 'Admin Products', link: '/admin/products'},
 ] %>
+<div class="backdrop"></div>
 <header class="main-header">
+    <button id="side-menu-toggle">Menu</button>
     <nav class="main-header__nav">
         <ul class="main-header__item-list">
             <% navItems.forEach(item => { %>
@@ -13,3 +19,13 @@
         </ul>
     </nav>
 </header>
+
+<nav class="mobile-nav">
+    <ul class="mobile-nav__item-list">
+        <% navItems.forEach(item => { %>
+            <li class="mobile-nav__item">
+                <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+            </li>
+        <% }) %>
+    </ul>
+</nav>
