@@ -2,8 +2,8 @@
 const express       = require('express');
 const ejs           = require('ejs');
 const bodyParser    = require('body-parser');
-const adminRouter   = require('./routes/admin');
-const mainRouter    = require('./routes/shop');
+const adminRouter   = require('./routes/adminRouter');
+const mainRouter    = require('./routes/shopRouter');
 const PORT          = process.env.PORT || 3000;
 const app           = express();
 //endregion

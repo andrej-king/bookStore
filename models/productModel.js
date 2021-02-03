@@ -2,6 +2,16 @@ const fs        = require('fs');
 const path      = require('path');
 const filePath  = path.join(path.dirname(require.main.filename), 'data', 'products.json');
 
+const getProductsFromFile = (cb) => {
+	fs.readFile(filePath, (error, fileContent) => {
+		if (error) {
+			return cb([]);
+		}
+
+		cb(JSON.parse(fileContent));
+	});
+}
+
 module.exports = class Product {
 	constructor(title, url, price, description) {
 		this.title          = title;
@@ -12,29 +22,26 @@ module.exports = class Product {
 
 	// save to products.json
 	save() {
-		fs.readFile(filePath, (error, fileContent) => {
-			let products = [];
-
-			if (!error) {
-				products = JSON.parse(fileContent);
-			}
-
+		this.id = Math.random().toString();
+		getProductsFromFile(products => { // will save callback result in var product
 			products.push(this);
 
 			fs.writeFile(filePath, JSON.stringify(products), (error) => {
 				console.log(error);
 			});
-		})
+		});
 	}
 
 	// read from file products.json
 	static fetchAll(cb) {
-		fs.readFile(filePath, (error, fileContent) => {
-			if (error) {
-				cb([]);
-			}
+		getProductsFromFile(cb);
+	}
 
-			cb(JSON.parse(fileContent));
+	static findById(id, cb) {
+		getProductsFromFile(products => {
+			// filter a product by its id
+			const product = products.find(p => p.id === id);
+			cb(product);
 		});
 	}
 }
