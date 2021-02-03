@@ -1,1 +1,37 @@
-[{"title":"Alice in wonderworld","imageUrl":"https://upload.wikimedia.org/wikipedia/en/3/36/Alice_in_Wonderland_%282010_film%29.png","price":"12","description":"Alice book","id":"0.8867698552806516"},{"title":"Harry Potter","imageUrl":"https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg","price":"20","description":"Description","id":"0.8867698152806516"},{"title":"Tom Sawyer","imageUrl":"https://m.media-amazon.com/images/I/51gP73y9PvL.jpg","price":"20","description":"Book about Tom Sawyer","id":"0.7827380839874054"},{"title":"451 degrees fahrenheit","imageUrl":"https://litlovetorrelles.files.wordpress.com/2015/09/451.jpg","price":"20","description":"Book description","id":"0.4821218875313005"},{"title":"The Lord of the Rings","imageUrl":"https://images-na.ssl-images-amazon.com/images/I/51EstVXM1UL._SX331_BO1,204,203,200_.jpg","price":"20","description":"Book description","id":"0.6891741985211641"}]
+[
+  {
+    "title": "Alice in wonderworld",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/en/3/36/Alice_in_Wonderland_%282010_film%29.png",
+    "price": "12",
+    "description": "Alice book",
+    "id": "0.8867698552806516"
+  },
+  {
+    "title": "Harry Potter",
+    "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg",
+    "price": "20",
+    "description": "Description",
+    "id": "0.8867698152806516"
+  },
+  {
+    "id": "0.7827380839874054",
+    "title": "Tom Sawyer",
+    "imageUrl": "https://m.media-amazon.com/images/I/51gP73y9PvL.jpg",
+    "price": "20",
+    "description": "Book about Tom Sawyer"
+  },
+  {
+    "id": "0.4821218875313005",
+    "title": "451 degrees fahrenheit",
+    "imageUrl": "https://litlovetorrelles.files.wordpress.com/2015/09/451.jpg",
+    "price": "20",
+    "description": "Book description new"
+  },
+  {
+    "id": "0.6891741985211641",
+    "title": "The Lord of the Rings",
+    "imageUrl": "https://images-na.ssl-images-amazon.com/images/I/51EstVXM1UL._SX331_BO1,204,203,200_.jpg",
+    "price": "20",
+    "description": "New book description"
+  }
+]

@@ -5,8 +5,11 @@ const productController = require('../controllers/adminController');
 // mini app pluggable to another express app
 
 router.get('/add-product', productController.getAddProduct);
+router.post('/add-product', productController.postAddProduct);
+
 router.get('/products', productController.getProducts);
 
-router.post('/add-product', productController.postAddProduct);
+router.get('/edit-product/:productId', productController.getEditProduct);
+router.post('/edit-product', productController.postEditProduct);
 
 module.exports = router;

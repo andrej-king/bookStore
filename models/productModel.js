@@ -13,7 +13,8 @@ const getProductsFromFile = (cb) => {
 }
 
 module.exports = class Product {
-	constructor(title, url, price, description) {
+	constructor(id, title, url, price, description) {
+		this.id             = id;
 		this.title          = title;
 		this.imageUrl       = url;
 		this.price          = price;
@@ -22,13 +23,22 @@ module.exports = class Product {
 
 	// save to products.json
 	save() {
-		this.id = Math.random().toString();
 		getProductsFromFile(products => { // will save callback result in var product
-			products.push(this);
+			if (this.id) { // if a product with this id exist
+				const existingProductIndex = products.findIndex(product => product.id === this.id);
+				const updatedProducts = [...products]; // spread operator - pull out existing products and store them in a new array
+				updatedProducts[existingProductIndex] = this;
 
-			fs.writeFile(filePath, JSON.stringify(products), (error) => {
-				console.log(error);
-			});
+				fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => {
+					console.log(error);
+				});
+			} else {
+				this.id = Math.random().toString();
+				products.push(this);
+				fs.writeFile(filePath, JSON.stringify(products), (error) => {
+					console.log(error);
+				});
+			}
 		});
 	}
 
