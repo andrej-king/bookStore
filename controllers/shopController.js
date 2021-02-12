@@ -33,8 +33,10 @@ exports.getCart = (req, res) => {
 					cartProducts.push({productData: product, qty: cartProductData.qty});
 				}
 			}
+			console.log(cartProducts);
 			res.render('shop/cart.ejs', {
 				products: cartProducts,
+				totalPrice: cart.totalPrice,
 				pageTitle: "Your cart",
 				path: '/cart'
 			})
@@ -45,11 +47,21 @@ exports.getCart = (req, res) => {
 }
 
 exports.postCart = (req, res) => {
+	const requestMethod = req.body._method;
 	const productId = req.body.productId;
-	Product.findById(productId, (product) => {
-		Cart.addProducts(productId, product.price);
-		res.redirect('/cart');
-	})
+
+	if (requestMethod !== 'DELETE') {
+		Product.findById(productId, (product) => {
+			Cart.addProducts(productId, product.price);
+			res.redirect('/cart');
+		})
+	} else {
+		// delete method
+		Product.findById(productId, (product) => {
+			Cart.removeProducts(productId, product.price);
+			res.redirect('/cart');
+		})
+	}
 }
 
 exports.getOrders = (req, res) => {

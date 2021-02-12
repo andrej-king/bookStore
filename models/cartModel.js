@@ -42,6 +42,36 @@ module.exports = class Cart {
 		});
 	}
 
+	static removeProducts(id, productPrice) {
+		fs.readFile(filePath, (error, fileContent) => {
+			let cart = {
+				products: [],
+				totalPrice: 0
+			};
+
+			if (!error) {
+				cart = JSON.parse(fileContent);
+			} else {
+				console.log("error reading the cart file.");
+			}
+
+			const removeProductIndex = cart.products.findIndex(product => product.id === id); // found index item for remove from cart
+			const removeProduct = cart.products[removeProductIndex];
+
+			let qty = removeProduct.qty; // quantity removing products
+
+			cart.products = [...cart.products]; // copy the old array
+			cart.products.splice(removeProductIndex, 1);
+			cart.totalPrice = cart.totalPrice - (productPrice * qty);
+
+
+			fs.writeFile(filePath, JSON.stringify(cart), error => {
+				console.log("failed to remove product from cart");
+			});
+
+		})
+	}
+
 	static getCart(cb) {
 		// to access the file and get the products ids
 		fs.readFile(filePath, (error, fileContent) => {

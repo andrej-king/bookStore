@@ -6,13 +6,19 @@
         <main>
             <% if (typeof products != "undefined") {%>
                     <% if(products.length > 0) {%>
-                        <ul>
+                        <ul class="cart-list">
                             <% products.forEach(prod => { %>
-                            	<li>
-                                    <p><%= prod.productData.title %>: <%= prod.qty %> pcs</p>
+                            	<li class="cart-list-item">
+                                        <p class="cart-item">
+                                            <img class="img-thumbnail-cart" src="<%= prod.productData.imageUrl %>" alt="">
+                                            <%= prod.productData.title %>: <%= prod.qty %> pcs &nbsp; <span class="cart-price">(<%= prod.productData.price * prod.qty %> €)</span>
+                                        </p>
+                                    <%- include('../includes/remove-from-cart.ejs', {product: prod.productData}) %>
+
                                 </li>
                             <% }) %>
                         </ul>
+                        <h2>Total price: <%= totalPrice %> €</h2>
                     <% } else { %>
                         <h1>Your cart is empty</h1>
                     <% } %>
