@@ -72,6 +72,44 @@ module.exports = class Cart {
 		})
 	}
 
+	static updateQuantityProducts(id, productPrice, quantityToUpdate) {
+		fs.readFile(filePath, (error, fileContent) => {
+			let cart = {
+				products: [],
+				totalPrice: 0
+			};
+
+			if (!error) {
+				cart = JSON.parse(fileContent);
+			} else {
+				console.log("error reading the cart file.");
+			}
+
+			// analyze the card find existing products
+			const existingProductIndex = cart.products.findIndex(product => product.id === id);
+			const existingProduct = cart.products[existingProductIndex];
+			let updatedProduct;
+
+			updatedProduct = {...existingProduct};
+			if (quantityToUpdate === '+1') {
+				updatedProduct.qty = updatedProduct.qty + 1; // updated quantity of the products
+				cart.totalPrice = cart.totalPrice + +productPrice;
+			} else {
+				updatedProduct.qty = updatedProduct.qty - 1; // updated quantity of the products
+				cart.totalPrice = cart.totalPrice - +productPrice;
+			}
+			cart.products = [...cart.products]; // copy the old array
+			cart.products[existingProductIndex] = updatedProduct; // replace existing product
+
+			// cart.totalPrice = cart.totalPrice + +productPrice;
+
+			fs.writeFile(filePath, JSON.stringify(cart), error => {
+				console.log("failed to write to cart.")
+			});
+
+		});
+	}
+
 	static getCart(cb) {
 		// to access the file and get the products ids
 		fs.readFile(filePath, (error, fileContent) => {

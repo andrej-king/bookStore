@@ -197,7 +197,8 @@ form {
 }
 
 .btn:hover,
-.btn:active {
+.btn:active,
+.btn:focus {
     background-color: #00695c;
     color: white;
 }
@@ -208,20 +209,41 @@ form {
     text-align: center;
     padding: 0.25rem;
     border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 1.2em;
 
     cursor: pointer;
 }
 
 .btn-remove:hover,
-.btn-remove:active {
+.btn-remove:active,
+.btn-remove:focus {
     border: none;
+    outline: none;
     background-color: #d0d0d0;
+}
+
+.flex-align-column-right {
+    display: flex;
+    flex-direction: column;
+}
+
+.fit-content {
+    width: fit-content;
+}
+
+.flex-end {
+    align-self: flex-end;
 }
 
 .cart-list {
     list-style: none;
     margin-left: 0;
     padding: 0;
+}
+
+.no-wrap {
+    white-space: nowrap;
 }
 
 .img-thumbnail-cart {
@@ -236,7 +258,7 @@ form {
     justify-content: space-between;
     align-items: center;
 
-    max-width: 500px;
+    max-width: 600px;
     margin-bottom: 1em;
     padding: 10px;
     border: 1px solid #e2e2e2;
@@ -255,12 +277,63 @@ form {
     margin-bottom: 0;
 }
 
+.cart-item-title {
+    max-width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 5px;
+}
+
+.cart-item-title,
+.cart-item-price {
+    display: block;
+}
+
 .cart-icon-close {
     color: #ff0000;
 }
 
+
 .cart-price {
     color: #d00505;
+    margin-top: 1em;
+}
+
+.icon-quantity-active {
+    border: transparent;
+    background: transparent;
+    text-align: center;
+    padding: 0.25rem;
+    border-radius: 3px;
+    color: #3b3a3a;
+    font-size: 1.2em;
+
+    cursor: pointer;
+}
+
+.icon-quantity-active:hover,
+.icon-quantity-active:active,
+.icon-quantity-active:focus {
+    border: none;
+    outline: none;
+}
+
+.icon-quantity-inactive {
+    border: transparent;
+    background: transparent;
+    text-align: center;
+    padding: 0.25rem;
+    border-radius: 3px;
+    color: #cdcdcd;
+    font-size: 1.2em;
+
+    cursor: default;
+}
+
+.icon-quantity-inactive:hover,
+.icon-quantity-inactive:active,
+.icon-quantity-inactive:focus {
+    border: none;
+    outline: none;
 }
 
 @media (min-width: 768px) {

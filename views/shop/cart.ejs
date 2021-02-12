@@ -9,16 +9,50 @@
                         <ul class="cart-list">
                             <% products.forEach(prod => { %>
                             	<li class="cart-list-item">
-                                        <p class="cart-item">
+                                        <div class="cart-item">
                                             <img class="img-thumbnail-cart" src="<%= prod.productData.imageUrl %>" alt="">
-                                            <%= prod.productData.title %>: <%= prod.qty %> pcs &nbsp; <span class="cart-price">(<%= prod.productData.price * prod.qty %> €)</span>
-                                        </p>
-                                    <%- include('../includes/remove-from-cart.ejs', {product: prod.productData}) %>
 
+                                            <p>
+                                                <span class="cart-item-title"><%= prod.productData.title %></span>
+                                                <span class="cart-price"><%= prod.productData.price %> $</span>
+                                            </p>
+                                        </div>
+
+
+                                    <div class="no-wrap flex-align-column-right">
+                                    <%- include('../includes/remove-from-cart.ejs', {product: prod.productData}) %>
+                                        <div>
+                                            <%
+                                                let iconStatus, lockSendForm;
+                                                if (prod.qty > 1) {
+                                                    iconStatus = 'icon-quantity-active';
+                                                    lockSendForm = '';
+                                                } else {
+                                                	iconStatus = 'icon-quantity-inactive';
+                                                    lockSendForm = 'preventDefault(event);';
+                                                }
+                                            %>
+
+                                            <form action="/cart" method="post">
+                                                <button class="<%= iconStatus %>" name="quantity_update" value="-1" type="submit" onclick=<%= lockSendForm %>> <span class="icon-minus-circle"></span></button>
+
+                                                <span class="cart-item-quantity"><%= prod.qty %></span>
+                                                <button class="icon-quantity-active" name="quantity_update" value="+1" type="submit"><span class="icon-plus-circle"></span></button>
+
+                                                <input type="hidden" value="<%= prod.productData.id %>" name="productId">
+                                                <input type="hidden" name="_method" value="PUT">
+                                            </form>
+                                        </div>
+
+
+
+
+
+                                    </div>
                                 </li>
                             <% }) %>
                         </ul>
-                        <h2>Total price: <%= totalPrice %> €</h2>
+                        <h2>Total price: <%= totalPrice %> $</h2>
                     <% } else { %>
                         <h1>Your cart is empty</h1>
                     <% } %>
