@@ -2,29 +2,40 @@ const Product = require('../models/productModel');
 const Cart    = require('../models/cartModel');
 
 exports.getProducts = (req, res) => {
-	Product.fetchAll(products => {
-		// res.render('shop/index.ejs', {
-		res.render('shop/product-list.ejs', {
-			products: products,
-			pageTitle: 'Products',
-			path: '/'
+	Product.fetchAll()
+		.then(products => {
+			res.render('shop/product-list.ejs', {
+				products: products,
+				pageTitle: 'Products',
+				path: '/'
+			});
+		})
+		.catch(error => {
+			console.log("Failed to fetch for shop controller");
 		});
-	});
 };
 
 exports.getProduct = (req, res) => {
 	const productId = req.params.productId;
-	Product.findById(productId, product => {
-		res.render('shop/product-detail.ejs', {
-			product: product,
-			pageTitle: product.title,
-			path: '/products'
+	Product.findById(productId)
+		.then(product => {
+			res.render('shop/product-detail.ejs', {
+				product: product,
+				pageTitle: product.title,
+				path: '/products'
+			});
+		})
+		.catch(error => {
+			console.log("Failed to fetch by id for shop controller");
 		});
-	});
 }
 
 exports.getCart = (req, res) => {
-	Cart.getCart(cart => {
+	res.render('shop/cart.ejs', {
+		pageTitle: "Your cart",
+		path: '/cart'
+	});
+	/*Cart.getCart(cart => {
 		Product.fetchAll(products => {
 			const cartProducts = [];
 			for (product of products) {
@@ -40,7 +51,7 @@ exports.getCart = (req, res) => {
 				path: '/cart'
 			})
 		});
-	});
+	});*/
 
 
 }

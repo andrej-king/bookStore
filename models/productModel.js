@@ -1,74 +1,57 @@
-const fs        = require('fs');
-const path      = require('path');
-const Cart      = require('./cartModel');
-const filePath  = path.join(path.dirname(require.main.filename), 'data', 'products.json');
+// work with mongodb
+const mongodb   = require('mongodb');
+const getDb     = require('../utilites/db').getDb; // import db connection
 
-const getProductsFromFile = (cb) => {
-	fs.readFile(filePath, (error, fileContent) => {
-		if (error) {
-			return cb([]);
-		}
-
-		cb(JSON.parse(fileContent));
-	});
-}
-
-module.exports = class Product {
-	constructor(id, title, url, price, description) {
-		this.id             = id;
+class Product {
+	constructor(title, url, price, description, id) {
 		this.title          = title;
 		this.imageUrl       = url;
 		this.price          = price;
 		this.description    = description;
+		this._id            = id ? new mongodb.ObjectId(id) : null;
 	}
 
-	// save to products.json
 	save() {
-		getProductsFromFile(products => { // will save callback result in var product
-			if (this.id) { // if a product with this id exist
-				const existingProductIndex = products.findIndex(product => product.id === this.id);
-				const updatedProducts = [...products]; // spread operator - pull out existing products and store them in a new array
-				updatedProducts[existingProductIndex] = this;
+		const db = getDb(); // connect to mongodb and save the product
+		let dbOperation;
 
-				fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => {
-					console.log(error);
-				});
-			} else {
-				this.id = Math.random().toString();
-				products.push(this);
-				fs.writeFile(filePath, JSON.stringify(products), (error) => {
-					console.log(error);
-				});
-			}
+		if (this._id) { // update product
+			dbOperation = db.collection('products').updateOne({_id: this._id}, {$set: this});
+		} else { // new product
+			dbOperation = db.collection('products').insertOne(this);
+		}
+
+		return dbOperation.then(result => {
+			console.log('success save or update product');
+		})
+		.catch(error => {
+			console.log("failed save or update product")
 		});
 	}
 
-	// read from file products.json
-	static fetchAll(cb) {
-		getProductsFromFile(cb);
-	}
+	static fetchAll() {
+		const db = getDb();
 
-	static findById(id, cb) {
-		getProductsFromFile(products => {
-			// filter a product by its id
-			const product = products.find(p => p.id === id);
-			cb(product);
-		});
-	}
-
-	static deleteById(id) {
-		getProductsFromFile(products => {
-			const product = products.find(productinArray => productinArray.id === id);
-			const updatedProducts = products.filter(product => product.id !== id);
-			fs.writeFile(filePath, JSON.stringify(updatedProducts), (error) => {
-				if (!error) {
-					console.log("File updated!");
-					Cart.deleteProduct(product.id, product.price);
-				} else {
-					console.log("Error in delete product");
-				}
+		return db.collection('products').find().toArray() // will work if < 1000 rows
+			.then(products => {
+				return products;
+			})
+			.catch(error => {
+				console.log("Failed to fetch all the products");
 			});
+	}
 
-		});
+	static findById(productId) {
+		const db = getDb();
+
+		return db.collection('products').findOne({_id: new mongodb.ObjectId(productId)})
+			.then(product => {
+				return product;
+			})
+			.catch(error => {
+				console.log('failed to fetch the product details');
+			});
 	}
 }
+
+module.exports = Product;

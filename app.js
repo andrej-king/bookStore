@@ -2,6 +2,7 @@
 const express       = require('express');
 const ejs           = require('ejs');
 const bodyParser    = require('body-parser');
+const mongoConnect  = require('./utilites/db').mongoConnect;
 const adminRouter   = require('./routes/adminRouter');
 const mainRouter    = require('./routes/shopRouter');
 const PORT          = process.env.PORT || 3000;
@@ -26,8 +27,10 @@ app.use((req, res) => {
 });
 //endregion
 
-//region port listener
-app.listen(PORT, () => {
-    console.log(`${PORT} is running`);
+//region connect to db and port listener
+mongoConnect(() => {
+	app.listen(PORT, () => {
+        console.log(`${PORT} is running`);
+	});
 });
 //endregion

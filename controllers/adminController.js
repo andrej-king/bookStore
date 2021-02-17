@@ -10,24 +10,34 @@ exports.getAddProduct = (req, res) => {
 
 exports.postAddProduct = (req, res) => {
 	const product = new Product(
-		null,
 		req.body.title.trim(),
 		req.body.imageUrl,
 		req.body.price,
 		req.body.description.trim()
 	)
-	product.save();
-	res.redirect('/');
+	product.save()
+		.then(result => {
+			console.log("Product saved");
+			res.redirect('/admin/products');
+		})
+		.catch(error => {
+			console.log("Failed to save product");
+			res.redirect('/admin/products');
+		});
 };
 
 exports.getProducts = (req, res) => {
-	Product.fetchAll(products => {
-		res.render("admin/products.ejs", {
-			products: products,
-			pageTitle: "Admin products",
-			path: "/admin/products"
+	Product.fetchAll()
+		.then(products => {
+			res.render("admin/products.ejs", {
+				products: products,
+				pageTitle: "Admin products",
+				path: "/admin/products"
+			})
 		})
-	})
+		.catch(error => {
+			console.log("Failed to fetch for admin controller");
+		})
 }
 
 exports.getEditProduct = (req, res) => {
