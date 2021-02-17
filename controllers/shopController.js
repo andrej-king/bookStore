@@ -51,16 +51,18 @@ exports.postCart = (req, res) => {
 
 	if (requestMethod === 'DELETE') {
 		// delete method
-		Product.findById(productId, (product) => {
+		/*Product.findById(productId, (product) => {
 			Cart.removeProducts(productId, product.price);
 			res.redirect('/cart');
-		});
+		});*/
+		res.redirect('/cart');
 	} else if (requestMethod === "PUT") {
-		const quantityToUpdate = req.body.quantity_update;
+		/*const quantityToUpdate = req.body.quantity_update;
 		Product.findById(productId, (product) => {
 			Cart.updateQuantityProducts(productId, product.price, quantityToUpdate);
 			res.redirect('/cart');
-		});
+		});*/
+		res.redirect('/cart');
 	} else {
 		Product.findById(productId, (product) => {
 			Cart.addProducts(productId, product.price);

@@ -42,7 +42,7 @@ module.exports = class Cart {
 		});
 	}
 
-	static removeProducts(id, productPrice) {
+	/*static removeProducts(id, productPrice) {
 		fs.readFile(filePath, (error, fileContent) => {
 			let cart = {
 				products: [],
@@ -70,9 +70,9 @@ module.exports = class Cart {
 			});
 
 		})
-	}
+	}*/
 
-	static updateQuantityProducts(id, productPrice, quantityToUpdate) {
+	/*static updateQuantityProducts(id, productPrice, quantityToUpdate) {
 		fs.readFile(filePath, (error, fileContent) => {
 			let cart = {
 				products: [],
@@ -108,7 +108,7 @@ module.exports = class Cart {
 			});
 
 		});
-	}
+	}*/
 
 	static getCart(cb) {
 		// to access the file and get the products ids
@@ -120,5 +120,31 @@ module.exports = class Cart {
 				cb(cart);
 			}
 		})
+	}
+
+	static deleteProduct(id, productPrice) {
+		fs.readFile(filePath, (error, fileContent) => {
+			if (error) {
+				return;
+			}
+
+			const updatedCart = {...JSON.parse(fileContent)};
+			const product = updatedCart.products.find(productInCart => productInCart.id === id);
+			if (!product) {
+				return;
+			}
+
+			const productQty = product.qty;
+			updatedCart.products = updatedCart.products.filter(product => product.id !== id);
+			updatedCart.totalPrice = updatedCart.totalPrice - (productPrice * productQty);
+
+			fs.writeFile(filePath, JSON.stringify(updatedCart), error => {
+				if (!error) {
+					console.log("Product has been deleted from the cart.");
+				} else {
+					console.log("Error in deleted from the cart.");
+				}
+			});
+		});
 	}
 }
