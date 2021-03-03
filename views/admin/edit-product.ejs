@@ -11,7 +11,7 @@
 <% let localProduct = {};
 if (typeof product !== 'undefined') {
     localProduct = {
-    	id: product.id,
+    	id: product._id,
         title: product.title,
         imageUrl: product.imageUrl,
         price: product.price,
@@ -41,7 +41,7 @@ if (typeof product !== 'undefined') {
         </div>
         <div class="form-control">
             <label for="price">Price</label>
-            <input type="number" name="price" id="price" step="0.01" value="<%= localProduct.price %>" required="required">
+            <input type="text" name="price" id="price" step="0.01" value="<%= localProduct.price %>" required="required" pattern="\d+">
         </div>
         <div class="form-control">
             <label for="description">Description</label>

@@ -1,63 +1,67 @@
 <%- include('../includes/header.ejs') %>
-    </head>
+<link rel="stylesheet" href="/css/cart.css">
+</head>
 
-    <body>
-        <%- include('../includes/navigation.ejs') %>
-        <main>
-            <% if (typeof products != "undefined") {%>
-                    <% if(products.length > 0) {%>
-                        <ul class="cart-list">
-                            <% products.forEach(prod => { %>
-                            	<li class="cart-list-item">
-                                        <div class="cart-item">
-                                            <img class="img-thumbnail-cart" src="<%= prod.productData.imageUrl %>" alt="">
+<body>
+<%- include('../includes/navigation.ejs') %>
+<main>
+    <% if (typeof products != "undefined") { %>
+        <% if(products.length > 0) { %>
 
-                                            <p>
-                                                <span class="cart-item-title"><%= prod.productData.title %></span>
-                                                <span class="cart-price"><%= prod.productData.price %> $</span>
-                                            </p>
-                                        </div>
+            <ul class="cart-list">
+                <%
+                    let totalPrice = 0;
+                %>
+                <% products.forEach(prod => { %>
+                    <%
+                        totalPrice += prod.price * prod.qty;
+                    %>
+                    <li class="cart-list-item">
+                        <div class="cart-item">
+                            <img class="img-thumbnail-cart" src="<%= prod.imageUrl %>" alt="">
+                            <p>
+                                <span class="cart-item-title"><%= prod.title %></span>
+                                <span class="cart-price"><%= prod.price %> $</span>
+                            </p>
+                        </div>
 
+                        <div class="no-wrap flex-align-column-right">
+                            <%- include('../includes/remove-from-cart.ejs', {product: prod}) %>
+                            <div>
 
-                                    <div class="no-wrap flex-align-column-right">
-                                    <%- include('../includes/remove-from-cart.ejs', {product: prod.productData}) %>
-                                        <div>
-                                            <%
-                                                let iconStatus, lockSendForm;
-                                                if (prod.qty > 1) {
-                                                    iconStatus = 'icon-quantity-active';
-                                                    lockSendForm = '';
-                                                } else {
-                                                	iconStatus = 'icon-quantity-inactive';
-                                                    lockSendForm = 'preventDefault(event);';
-                                                }
-                                            %>
+                                <%
+                                    let iconStatus, lockSendForm;
+                                    if (prod.qty > 1) {
+                                        iconStatus = 'icon-quantity-active';
+                                        lockSendForm = '';
+                                    } else {
+                                        iconStatus = 'icon-quantity-inactive';
+                                        lockSendForm = 'preventDefault(event);';
+                                    }
+                                %>
 
-                                            <form action="/cart" method="post">
-                                                <button class="<%= iconStatus %>" name="quantity_update" value="-1" type="submit" onclick=<%= lockSendForm %>> <span class="icon-minus-circle"></span></button>
+                                <form action="/cart-update-qty-item" method="post">
+                                    <button class="<%= iconStatus %>" name="quantity_update" value="-1" type="submit"
+                                            onclick=<%= lockSendForm %>><span class="icon-minus-circle"></span></button>
 
-                                                <span class="cart-item-quantity"><%= prod.qty %></span>
-                                                <button class="icon-quantity-active" name="quantity_update" value="+1" type="submit"><span class="icon-plus-circle"></span></button>
+                                    <span class="cart-item-quantity"><%= prod.qty %></span>
+                                    <button class="icon-quantity-active" name="quantity_update" value="+1"
+                                            type="submit"><span class="icon-plus-circle"></span></button>
 
-                                                <input type="hidden" value="<%= prod.productData.id %>" name="productId">
-                                                <input type="hidden" name="_method" value="PUT">
-                                            </form>
-                                        </div>
-
-
-
-
-
-                                    </div>
-                                </li>
-                            <% }) %>
-                        </ul>
-                        <h2>Total price: <%= totalPrice %> $</h2>
-                    <% } else { %>
-                        <h1>Your cart is empty</h1>
-                    <% } %>
-            <% } else {%>
-                <h1>Your cart is empty</h1>
-            <% } %>
-        </main>
-        <%- include('../includes/footer.ejs') %>
+                                    <input type="hidden" value="<%= prod._id %>" name="productId">
+                                    <input type="hidden" name="_method" value="PUT">
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                <% }); %>
+            </ul>
+            <h2 class="cart__total-price">Total price: <%= totalPrice %> $</h2>
+        <% } else { %>
+            <h1>Your cart is empty</h1>
+        <% } %>
+    <% } else { %>
+        <h1>Your cart is empty</h1>
+    <% } %>
+</main>
+<%- include('../includes/footer.ejs') %>

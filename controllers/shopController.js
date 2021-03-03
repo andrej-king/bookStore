@@ -1,13 +1,17 @@
 const Product = require('../models/productModel');
 const Cart    = require('../models/cartModel');
 
+exports.getShop = (req, res) => {
+	res.redirect('/products');
+}
+
 exports.getProducts = (req, res) => {
 	Product.fetchAll()
 		.then(products => {
 			res.render('shop/product-list.ejs', {
 				products: products,
 				pageTitle: 'Products',
-				path: '/'
+				path: '/products'
 			});
 		})
 		.catch(error => {
@@ -31,55 +35,56 @@ exports.getProduct = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
-	res.render('shop/cart.ejs', {
-		pageTitle: "Your cart",
-		path: '/cart'
-	});
-	/*Cart.getCart(cart => {
-		Product.fetchAll(products => {
-			const cartProducts = [];
-			for (product of products) {
-				const cartProductData = cart.products.find(cartProduct => cartProduct.id === product.id);
-				if (cartProductData) {
-					cartProducts.push({productData: product, qty: cartProductData.qty});
-				}
-			}
+	req.user.getCart()
+		.then(products => {
 			res.render('shop/cart.ejs', {
-				products: cartProducts,
-				totalPrice: cart.totalPrice,
 				pageTitle: "Your cart",
-				path: '/cart'
-			})
-		});
-	});*/
-
-
+				path: '/cart',
+				products: products
+			});
+		})
+		.catch(error => {
+			console.log('Fail to fetch the cart');
+		})
 }
 
 exports.postCart = (req, res) => {
-	const requestMethod = req.body._method;
 	const productId = req.body.productId;
 
-	if (requestMethod === 'DELETE') {
-		// delete method
-		/*Product.findById(productId, (product) => {
-			Cart.removeProducts(productId, product.price);
-			res.redirect('/cart');
-		});*/
-		res.redirect('/cart');
-	} else if (requestMethod === "PUT") {
-		/*const quantityToUpdate = req.body.quantity_update;
-		Product.findById(productId, (product) => {
-			Cart.updateQuantityProducts(productId, product.price, quantityToUpdate);
-			res.redirect('/cart');
-		});*/
-		res.redirect('/cart');
-	} else {
-		Product.findById(productId, (product) => {
-			Cart.addProducts(productId, product.price);
+	Product.findById(productId)
+		.then(product => {
+			req.user.addToCart(product);
+		})
+		.then(result => {
+			console.log('Product saved to cart');
 			res.redirect('/cart');
 		});
-	}
+}
+
+exports.postDeleteFromCart = (req, res) => {
+	const productId = req.body.productId;
+	req.user.deleteItemFromCart(productId)
+		.then(result => {
+			res.redirect('/cart');
+		})
+		.catch(error => {
+			console.log('Fail ro delete an item from cart');
+		})
+}
+
+exports.postUpdateFromCart = (req, res) => {
+	const productId = req.body.productId;
+	const qtyUpdate = req.body.quantity_update;
+
+
+	Product.findById(productId)
+		.then(product => {
+			req.user.updateQtyInCart(product, qtyUpdate);
+		})
+		.then(result => {
+			console.log('Product quantity updated');
+			res.redirect('/cart');
+		});
 }
 
 exports.getOrders = (req, res) => {

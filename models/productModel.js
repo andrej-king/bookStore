@@ -44,12 +44,24 @@ class Product {
 	static findById(productId) {
 		const db = getDb();
 
-		return db.collection('products').findOne({_id: new mongodb.ObjectId(productId)})
+		return db.collection('products').find({_id: new mongodb.ObjectId(productId)}).next()
 			.then(product => {
 				return product;
 			})
 			.catch(error => {
 				console.log('failed to fetch the product details');
+			});
+	}
+
+	static deleteById(productId) {
+		const db = getDb();
+
+		return db.collection('products').deleteOne({_id: new mongodb.ObjectId(productId)})
+			.then(result => {
+				console.log('Product removed successfully');
+			})
+			.catch(error => {
+				console.log('Failed to delete item');
 			});
 	}
 }

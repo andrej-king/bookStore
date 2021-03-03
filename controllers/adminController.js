@@ -44,27 +44,31 @@ exports.getEditProduct = (req, res) => {
 	const editMode = req.query.edit;
 	const productId = req.params.productId;
 
-	Product.findById(productId, product => {
-		if (!product) {
-			return res.redirect('/');
-		}
+	Product.findById(productId)
+		.then(product => {
+			if (!product) {
+				return res.redirect('/');
+			}
 
-		res.render('admin/edit-product.ejs', {
-			pageTitle: 'Edit Product',
-			path: '/admin/edit-product',
-			editing: editMode,
-			product: product
-		});
-	});
+			res.render('admin/edit-product.ejs', {
+				pageTitle: 'Edit Product',
+				path: '/admin/edit-product',
+				editing: editMode,
+				product: product
+			});
+		})
+		.catch(error => {
+			console.log("Failed to edit product for admin controller");
+		})
 };
 
 exports.postEditProduct = (req, res) => {
 	const product = new Product(
-		req.body.productId,
 		req.body.title.trim(),
 		req.body.imageUrl,
 		req.body.price,
-		req.body.description.trim()
+		req.body.description.trim(),
+		req.body.productId
 	)
 	product.save();
 	res.redirect("/admin/products");
@@ -72,6 +76,8 @@ exports.postEditProduct = (req, res) => {
 
 exports.postDeleteProduct = (req, res) => {
 	const productId = req.body.productId;
-	Product.deleteById(productId);
-	res.redirect('/admin/products');
+	Product.deleteById(productId)
+		.then(() => {
+			res.redirect('/admin/products');
+		});
 };
