@@ -1,4 +1,5 @@
 //region declaring variable
+require('dotenv').config();
 const express       = require('express');
 const ejs           = require('ejs');
 const bodyParser    = require('body-parser');
@@ -17,7 +18,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 app.use((req, res, next) => {
-	User.findById('603f81d736f66130ec73758f')
+	User.findById(`${process.env.USER_ID}`)
 		.then(user => {
 			req.user = new User(user.name, user.email, user.cart, user._id);
 			next();
