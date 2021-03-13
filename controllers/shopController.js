@@ -30,6 +30,7 @@ exports.getProduct = (req, res) => {
 			});
 		})
 		.catch(error => {
+			res.redirect('/');
 			console.log("Failed to fetch by id for shop controller");
 		});
 }
@@ -44,6 +45,7 @@ exports.getCart = (req, res) => {
 			});
 		})
 		.catch(error => {
+			res.redirect('/');
 			console.log('Fail to fetch the cart');
 		})
 }
@@ -68,6 +70,7 @@ exports.postDeleteFromCart = (req, res) => {
 			res.redirect('/cart');
 		})
 		.catch(error => {
+			res.redirect('/');
 			console.log('Fail ro delete an item from cart');
 		})
 }
@@ -99,6 +102,7 @@ exports.getOrders = (req, res) => {
 			});
 		})
 		.catch(error => {
+			res.redirect('/');
 			console.log(error);
 		})
 
@@ -110,6 +114,7 @@ exports.postOrder = (req, res) => {
 			res.redirect('orders');
 		})
 		.catch(error => {
+			res.redirect('/');
 			console.log(error);
 		})
 }
