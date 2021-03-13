@@ -203,6 +203,18 @@ form {
     color: white;
 }
 
+.link-info {
+    text-decoration: none;
+    color: #00695c;
+    font: inherit;
+}
+
+.link-info:hover {
+    background-color: #00695c;
+    color: white;
+    text-decoration: underline;
+}
+
 .btn-remove {
     border: transparent;
     background: transparent;

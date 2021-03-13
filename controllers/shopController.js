@@ -88,10 +88,30 @@ exports.postUpdateFromCart = (req, res) => {
 }
 
 exports.getOrders = (req, res) => {
-	res.render('shop/orders.ejs', {
-		pageTitle: "Orders",
-		path: '/orders'
-	})
+	req.user.getOrders()
+		.then(orders => {
+			console.log(orders);
+
+			res.render('shop/orders.ejs', {
+				pageTitle: "Your Orders",
+				path: '/orders',
+				orders: orders
+			});
+		})
+		.catch(error => {
+			console.log(error);
+		})
+
+}
+
+exports.postOrder = (req, res) => {
+	req.user.addOrder()
+		.then(result => {
+			res.redirect('orders');
+		})
+		.catch(error => {
+			console.log(error);
+		})
 }
 
 exports.getCheckout = (req, res) => {

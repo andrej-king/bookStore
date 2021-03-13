@@ -103,6 +103,37 @@ class User {
 			{$set: {cart: { items: updatedCartItems }}}
 		);
 	}
+
+	addOrder() {
+		const db = getDb();
+
+		return this.getCart()
+			.then(products => { // save info about order from cart in collection orders
+				const order = {
+					items: products,
+					user: {
+						_id: new ObjectId(this._id),
+						name: this.name,
+						email: this.email
+					}
+				};
+
+				return db.collection('orders').insertOne(order);
+			})
+			.then(result => { // clean cart
+				this.cart = { items: [] };
+				return db.collection('users')
+					.updateOne(
+						{ _id: new ObjectId(this._id) },
+						{ $set: { cart: { items: [] } } }
+					);
+			});
+	}
+
+	getOrders() {
+		const db = getDb();
+		return db.collection('orders').find({'user._id': new ObjectId(this._id)}).toArray();
+	}
 }
 
 module.exports = User;
