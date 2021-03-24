@@ -12,7 +12,8 @@ exports.getProducts = (req, res) => {
 			res.render('shop/product-list.ejs', {
 				products: products,
 				pageTitle: 'Products',
-				path: '/products'
+				path: '/products',
+				isAuthenticated: req.session.isLoggedIn
 			});
 		})
 		.catch(error => {
@@ -28,7 +29,8 @@ exports.getProduct = (req, res) => {
 			res.render('shop/product-detail.ejs', {
 				product: product,
 				pageTitle: product.title,
-				path: '/products'
+				path: '/products',
+				isAuthenticated: req.session.isLoggedIn
 			});
 		})
 		.catch(error => {
@@ -38,6 +40,9 @@ exports.getProduct = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
+	if (!req.session.isLoggedIn) {
+		return res.redirect('/');
+	}
 	req.user
 		.populate('cart.items.productId')
 		.execPopulate()
@@ -46,7 +51,8 @@ exports.getCart = (req, res) => {
 			res.render('shop/cart.ejs', {
 				pageTitle: "Your cart",
 				path: '/cart',
-				products: products
+				products: products,
+				isAuthenticated: req.session.isLoggedIn
 			});
 		})
 		.catch(error => {
@@ -105,12 +111,16 @@ exports.postUpdateFromCart = (req, res) => {
 }
 
 exports.getOrders = (req, res) => {
+	if (!req.session.isLoggedIn) {
+		return res.redirect('/');
+	}
 	Order.find({'user.userId': req.user._id})
 		.then(orders => {
 			res.render('shop/orders.ejs', {
 				pageTitle: "Your Orders",
 				path: '/orders',
-				orders: orders
+				orders: orders,
+				isAuthenticated: req.session.isLoggedIn
 			});
 		})
 		.catch(error => {
@@ -149,11 +159,4 @@ exports.postOrder = (req, res) => {
 			console.log(error);
 			res.redirect('/');
 		});
-}
-
-exports.getCheckout = (req, res) => {
-	res.render('shop/checkout.ejs', {
-		pageTitle: "Checkout",
-		path: '/checkout'
-	})
 }

@@ -1,10 +1,14 @@
 const Product = require('../models/productModel');
 
 exports.getAddProduct = (req, res) => {
+	if (!req.session.isLoggedIn) {
+		return res.redirect('/');
+	}
 	res.render('admin/edit-product.ejs', {
 		pageTitle: 'Add Product',
 		path: '/admin/add-product',
-		editing: false
+		editing: false,
+		isAuthenticated: req.session.isLoggedIn
 	});
 };
 
@@ -29,12 +33,16 @@ exports.postAddProduct = (req, res) => {
 };
 
 exports.getProducts = (req, res) => {
+	if (!req.session.isLoggedIn) {
+		return res.redirect('/');
+	}
 	Product.find()
 		.then(products => {
 			res.render("admin/products.ejs", {
 				products: products,
 				pageTitle: "Admin products",
-				path: "/admin/products"
+				path: "/admin/products",
+				isAuthenticated: req.session.isLoggedIn
 			})
 		})
 		.catch(error => {
@@ -44,6 +52,9 @@ exports.getProducts = (req, res) => {
 }
 
 exports.getEditProduct = (req, res) => {
+	if (!req.session.isLoggedIn) {
+		return res.redirect('/');
+	}
 	const editMode = req.query.edit;
 	const productId = req.params.productId;
 
@@ -57,7 +68,8 @@ exports.getEditProduct = (req, res) => {
 				pageTitle: 'Edit Product',
 				path: '/admin/edit-product',
 				editing: editMode,
-				product: product
+				product: product,
+				isAuthenticated: req.session.isLoggedIn
 			});
 		})
 		.catch(error => {

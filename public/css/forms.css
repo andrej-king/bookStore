@@ -18,3 +18,10 @@
 .form-control input:focus {
     outline-color: #00695c;
 }
+
+textarea,
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+    padding: 0.6rem;
+}

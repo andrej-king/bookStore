@@ -96,7 +96,7 @@
 
 .cart__total-price {
     text-align: right;
-    margin: 0 auto;
+    margin: 0 auto 1.5rem;
     width: 40rem;
     max-width: 90%;
     font-size: 1.6rem;

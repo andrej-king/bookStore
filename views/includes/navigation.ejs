@@ -1,31 +1,78 @@
-<% navItems = [
-    {title: 'Shop', link: '/'},
-    {title: 'Products', link: '/products'},
-    {title: 'Cart', link: '/cart'},
-    {title: 'Orders', link: '/orders'},
-    {title: 'Add Product', link: '/admin/add-product'},
-    {title: 'Admin Products', link: '/admin/products'},
+<%
+const showAlways        = 'always';
+const showOnlyLogged    = 'onlyLogged';
+const showOnlyUnlogged  = 'onlyUnlogged';
+
+navItems = [
+[
+    {title: 'Shop', link: '/', showItem: showAlways},
+    {title: 'Products', link: '/products', showItem: showAlways},
+    {title: 'Cart', link: '/cart', showItem: showOnlyLogged},
+    {title: 'Orders', link: '/orders', showItem: showOnlyLogged},
+    {title: 'Add Product', link: '/admin/add-product', showItem: showOnlyLogged},
+    {title: 'Admin Products', link: '/admin/products', showItem: showOnlyLogged}
+],
+[
+    {title: 'Login', link: '/login', showItem: showOnlyUnlogged},
+    {title: 'Logout', link: '/logout', showItem: showOnlyLogged}
+]
 ] %>
 <div class="backdrop"></div>
 <header class="main-header">
     <button id="side-menu-toggle">Menu</button>
     <nav class="main-header__nav">
-        <ul class="main-header__item-list">
-            <% navItems.forEach(item => { %>
-                <li class="main-header__item">
-                    <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
-                </li>
-            <% }) %>
-        </ul>
+        <% navItems.forEach(navItem => { %>
+            <ul class="main-header__item-list">
+                <% navItem.forEach(item => { %>
+                    <% if (item.showItem === showOnlyLogged && isAuthenticated) { %>
+                        <% if (item.link === '/logout') { %>
+                            <li class="main-header__item">
+                                <%- include('../includes/logout.ejs') %>
+                            </li>
+                        <% } else { %>
+                            <li class="main-header__item">
+                                <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                            </li>
+                        <% } %>
+                    <% } else if (item.showItem === showOnlyUnlogged && !isAuthenticated) { %>
+                        <li class="main-header__item">
+                            <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                        </li>
+                    <% } else if (item.showItem === showAlways) { %>
+                        <li class="main-header__item">
+                            <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                        </li>
+                    <% } %>
+                <% }) %>
+            </ul>
+        <% }) %>
     </nav>
 </header>
 
 <nav class="mobile-nav">
-    <ul class="mobile-nav__item-list">
-        <% navItems.forEach(item => { %>
-            <li class="mobile-nav__item">
-                <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
-            </li>
-        <% }) %>
-    </ul>
+    <% navItems.forEach(navItem => { %>
+        <ul class="mobile-nav__item-list">
+            <% navItem.forEach(item => { %>
+                <% if (item.showItem === showOnlyLogged && isAuthenticated) { %>
+                    <% if (item.link === '/logout') { %>
+                        <li class="mobile-nav__item">
+                            <%- include('../includes/logout.ejs') %>
+                        </li>
+                    <% } else { %>
+                        <li class="mobile-nav__item">
+                            <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                        </li>
+                    <% } %>
+                <% } else if (item.showItem === showOnlyUnlogged && !isAuthenticated) { %>
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                    </li>
+                <% } else if (item.showItem === showAlways) { %>
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === item.link ? 'active': '' %>" href="<%= item.link %>"><%= item.title %></a>
+                    </li>
+                <% } %>
+            <% }) %>
+        </ul>
+    <% }) %>
 </nav>
