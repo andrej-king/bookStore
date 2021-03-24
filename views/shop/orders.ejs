@@ -13,18 +13,16 @@
                 <li class="orders__item">
                     <h2 class="order__item-title">Order - # <%= order._id %></h2>
                     <ul class="orders__item-list">
-                        <% order.items.forEach(product => { %>
+                        <% order.products.forEach(product => { %>
                             <li class="orders__item-list-products">
-                                <img class="img-thumbnail-order" src="<%= product.imageUrl %>" alt="">
-                                <a href="/products/<%= product._id %>" class="link-info"><%= product.title %> (<%= product.qty %>)</a>
+                                <img class="img-thumbnail-order" src="<%= product.product.imageUrl %>" alt="">
+                                <a href="/products/<%= product.product._id %>" class="link-info"><%= product.product.title %> (<%= product.qty %>)</a>
                             </li>
                         <% }); %>
                     </ul>
                 </li>
             <% }); %>
             </ul>
-
-
         <% } else { %>
             <h1>Your order list is empty</h1>
         <% } %>

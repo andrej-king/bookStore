@@ -14,19 +14,19 @@
                 %>
                 <% products.forEach(prod => { %>
                     <%
-                        totalPrice += prod.price * prod.qty;
+                        totalPrice += prod.productId.price * prod.qty;
                     %>
                     <li class="cart-list-item">
                         <div class="cart-item">
-                            <img class="img-thumbnail-cart" src="<%= prod.imageUrl %>" alt="">
+                            <img class="img-thumbnail-cart" src="<%= prod.productId.imageUrl %>" alt="">
                             <p>
-                                <span class="cart-item-title"><%= prod.title %></span>
-                                <span class="cart-price"><%= prod.price %> $</span>
+                                <a href="/products/<%= prod.productId._id %>" class="link-info cart-item-title"><%= prod.productId.title %></a>
+                                <span class="cart-price"><%= prod.productId.price %> $</span>
                             </p>
                         </div>
 
                         <div class="no-wrap flex-align-column-right">
-                            <%- include('../includes/remove-from-cart.ejs', {product: prod}) %>
+                            <%- include('../includes/remove-from-cart.ejs', {product: prod.productId}) %>
                             <div>
 
                                 <%
@@ -48,7 +48,7 @@
                                     <button class="icon-quantity-active" name="quantity_update" value="+1"
                                             type="submit"><span class="icon-plus-circle"></span></button>
 
-                                    <input type="hidden" value="<%= prod._id %>" name="productId">
+                                    <input type="hidden" value="<%= prod.productId._id %>" name="productId">
                                     <input type="hidden" name="_method" value="PUT">
                                 </form>
                             </div>

@@ -1,69 +1,18 @@
-// work with mongodb
-const mongodb   = require('mongodb');
-const getDb     = require('../utilites/db').getDb; // import db connection
+// ORM - Object relationship model (SQL)
+// ODM - Object document mapping (mongo db)
+const mongoose  = require('mongoose');
+const Schema    = mongoose.Schema;
 
-class Product {
-	constructor(title, url, price, description, id) {
-		this.title          = title;
-		this.imageUrl       = url;
-		this.price          = price;
-		this.description    = description;
-		this._id            = id ? new mongodb.ObjectId(id) : null;
+const productSchema = new Schema({
+	title: {type: String, required: true},
+	price: {type: Number, required: true},
+	description: {type: String, required: true},
+	imageUrl: {type: String, required: true},
+	userId: { // relationship
+		type: Schema.Types.ObjectId,
+		ref: 'User', // collection
+		required: true
 	}
+});
 
-	save() {
-		const db = getDb(); // connect to mongodb and save the product
-		let dbOperation;
-
-		if (this._id) { // update product
-			dbOperation = db.collection('products').updateOne({_id: this._id}, {$set: this});
-		} else { // new product
-			dbOperation = db.collection('products').insertOne(this);
-		}
-
-		return dbOperation.then(result => {
-			console.log('success save or update product');
-		})
-		.catch(error => {
-			console.log("failed save or update product")
-		});
-	}
-
-	static fetchAll() {
-		const db = getDb();
-
-		return db.collection('products').find().toArray() // will work if < 1000 rows
-			.then(products => {
-				return products;
-			})
-			.catch(error => {
-				console.log("Failed to fetch all the products");
-			});
-	}
-
-	static findById(productId) {
-		const db = getDb();
-
-		return db.collection('products').find({_id: new mongodb.ObjectId(productId)}).next()
-			.then(product => {
-				return product;
-			})
-			.catch(error => {
-				console.log('failed to fetch the product details');
-			});
-	}
-
-	static deleteById(productId) {
-		const db = getDb();
-
-		return db.collection('products').deleteOne({_id: new mongodb.ObjectId(productId)})
-			.then(result => {
-				console.log('Product removed successfully');
-			})
-			.catch(error => {
-				console.log('Failed to delete item');
-			});
-	}
-}
-
-module.exports = Product;
+module.exports = mongoose.model('Product', productSchema); // mongoose will autoconvert User model to collection 'products'
