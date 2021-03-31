@@ -1,9 +1,6 @@
 const Product = require('../models/productModel');
 
 exports.getAddProduct = (req, res) => {
-	if (!req.session.isLoggedIn) {
-		return res.redirect('/');
-	}
 	res.render('admin/edit-product.ejs', {
 		pageTitle: 'Add Product',
 		path: '/admin/add-product',
@@ -33,9 +30,6 @@ exports.postAddProduct = (req, res) => {
 };
 
 exports.getProducts = (req, res) => {
-	if (!req.session.isLoggedIn) {
-		return res.redirect('/');
-	}
 	Product.find()
 		.then(products => {
 			res.render("admin/products.ejs", {
@@ -52,9 +46,6 @@ exports.getProducts = (req, res) => {
 }
 
 exports.getEditProduct = (req, res) => {
-	if (!req.session.isLoggedIn) {
-		return res.redirect('/');
-	}
 	const editMode = req.query.edit;
 	const productId = req.params.productId;
 

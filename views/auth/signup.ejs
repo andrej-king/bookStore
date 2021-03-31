@@ -11,17 +11,25 @@
         <div class="user-message"><%= errorMsg %></div>
     <% } %>
 
-    <form class="login-form" action="/login" method="POST">
+    <form class="signup-form" action="/signup" method="POST">
+        <div class="form-control">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" autofocus />
+        </div>
         <div class="form-control">
             <label for="email">Email</label>
-            <input type="email" name="email" id="email" placeholder="Enter your email" autofocus />
+            <input type="email" name="email" id="email" placeholder="Enter your email" />
         </div>
         <div class="form-control">
             <label for="password">Password</label>
             <input type="password" name="password" id="password" placeholder="Enter password" />
         </div>
+        <div class="form-control">
+            <label for="confirmPassword">Confirm password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Enter password again" />
+        </div>
         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <button class="btn" type="submit">Login</button>
+        <button class="btn" type="submit">Signup</button>
     </form>
 </main>
 <%- include('../includes/footer.ejs') %>

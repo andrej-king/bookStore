@@ -48,6 +48,7 @@ if (typeof product !== 'undefined') {
             <textarea name="description" id="description" rows="5" required="required"><%= localProduct.description %></textarea>
         </div>
         <input type="hidden" name="productId" value="<%= localProduct.id %>">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
         <button class="btn" type="submit"><%= sendFormBtn %></button>
     </form>

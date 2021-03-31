@@ -13,7 +13,8 @@ exports.getProducts = (req, res) => {
 				products: products,
 				pageTitle: 'Products',
 				path: '/products',
-				isAuthenticated: req.session.isLoggedIn
+				isAuthenticated: req.session.isLoggedIn,
+				csrfToken: req.csrfToken() // send csurf token
 			});
 		})
 		.catch(error => {
@@ -40,9 +41,6 @@ exports.getProduct = (req, res) => {
 }
 
 exports.getCart = (req, res) => {
-	if (!req.session.isLoggedIn) {
-		return res.redirect('/');
-	}
 	req.user
 		.populate('cart.items.productId')
 		.execPopulate()
@@ -95,7 +93,6 @@ exports.postUpdateFromCart = (req, res) => {
 	const productId = req.body.productId;
 	const qtyUpdate = req.body.quantity_update;
 
-
 	Product.findById(productId)
 		.then(product => {
 			return req.user.addToCart(product, qtyUpdate);
@@ -111,9 +108,6 @@ exports.postUpdateFromCart = (req, res) => {
 }
 
 exports.getOrders = (req, res) => {
-	if (!req.session.isLoggedIn) {
-		return res.redirect('/');
-	}
 	Order.find({'user.userId': req.user._id})
 		.then(orders => {
 			res.render('shop/orders.ejs', {
